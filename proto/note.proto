@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package db_service;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "tagger/tagger.proto";
+
+option go_package = "github.com/XenonPPG/KRS_CONTRACTS/gen/note_v1;note_v1";
+
+service NoteService {
+  rpc CreateNote(CreateNoteRequest) returns (Note);
+  rpc GetNote(GetNoteRequest) returns (Note);
+  rpc GetAllNotes(GetAllNotesRequest) returns (GetAllNotesResponse);
+  rpc UpdateNote(UpdateNoteRequest) returns (Note);
+  rpc DeleteNote(DeleteNoteRequest) returns (google.protobuf.Empty);
+}
+
+message CreateNoteRequest {
+  int64 userID = 1 [(tagger.tags) = "swaggerignore:\"true\""];
+  string title = 2;
+  string content = 3;
+}
+
+message Note {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  int64 userID = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+}
+
+message GetNoteRequest {
+  int64 id = 1;
+  int64 userID = 2 [(tagger.tags) = "swaggerignore:\"true\""];
+}
+
+message GetAllNotesRequest {
+  int64 userID = 1 [(tagger.tags) = "swaggerignore:\"true\""];
+  int32 limit = 2;
+  int32 offset = 3;
+  bool ascendingOrder = 4;
+}
+
+message GetAllNotesResponse {
+  repeated Note notes = 1;
+  int32 total_count = 2;
+}
+
+message UpdateNoteRequest {
+  int64 id = 1;
+  int64 userID = 2 [(tagger.tags) = "swaggerignore:\"true\""];
+  optional string title = 3;
+  optional string content = 4;
+}
+
+message DeleteNoteRequest {
+  int64 id = 1;
+  int64 userID = 2 [(tagger.tags) = "swaggerignore:\"true\""];
+}
